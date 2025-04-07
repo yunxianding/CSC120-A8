@@ -14,6 +14,14 @@ public class Student {
         this.classes = new ArrayList<>(); 
     }
 
+    /* New overloaded constructor (accepts only a name) */
+    public Student(String name) {
+        this.name = name;
+        this.id = "Unknown"; // Default value for ID
+        this.classYear = 0;  // Default value for class year
+        this.classes = new ArrayList<>();
+    }
+
     public String getName() {
         return this.name; 
     }

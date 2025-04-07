@@ -7,6 +7,12 @@ public class Cafe extends Building implements CafeRequirements{
     private int nCreams;
     private int nCups;
 
+    /**
+     * Constructor for the Cafe class.
+     * @param name The name of the cafe.    
+     * @param address The address of the cafe.
+     * @param nFloors The number of floors in the cafe.
+     */
     public Cafe(String name, String address, int nFloors) {
         super(name, address, nFloors);
         this.nCoffeeOunces = 100; // Initial amount of coffee in ounces
