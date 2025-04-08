@@ -1,7 +1,7 @@
 /* This is a stub for the Cafe class */
-public class Cafe extends Building implements CafeRequirements{
+public class Cafe extends Building implements CafeRequirements {
 
-    //Attributes
+    // Attributes
     private int nCoffeeOunces;
     private int nSugarPackets;
     private int nCreams;
@@ -9,7 +9,7 @@ public class Cafe extends Building implements CafeRequirements{
 
     /**
      * Constructor for the Cafe class.
-     * @param name The name of the cafe.    
+     * @param name The name of the cafe.
      * @param address The address of the cafe.
      * @param nFloors The number of floors in the cafe.
      */
@@ -21,7 +21,32 @@ public class Cafe extends Building implements CafeRequirements{
         this.nCups = 50; // Initial number of cups
         System.out.println("You have built a cafe: ☕");
     }
-    
+
+    /**
+     * Overloaded constructor for the Cafe class with default floors.
+     * @param name The name of the cafe.
+     * @param address The address of the cafe.
+     */
+    public Cafe(String name, String address) {
+        this(name, address, 1); // Default to 1 floor
+    }
+
+
+    @Override
+    public void goUp() {
+        throw new UnsupportedOperationException("Cafes only have one floor. You cannot go up.");
+    }
+
+    @Override
+    public void goDown() {
+        throw new UnsupportedOperationException("Cafes only have one floor. You cannot go down.");
+    }
+
+    @Override
+    public void goToFloor(int floorNum) {
+        throw new UnsupportedOperationException("Cafes only have one floor. You cannot go to another floor.");
+    }
+
     /**
      * Sells a cup of coffee and decreases inventory accordingly.
      * @param size The size of the coffee in ounces.
@@ -41,6 +66,13 @@ public class Cafe extends Building implements CafeRequirements{
     }
 
     /**
+     * Overloaded sellCoffee method for default coffee size and ingredients.
+     */
+    public void sellCoffee() {
+        sellCoffee(12, 1, 1); // Default to 12 ounces, 1 sugar packet, 1 cream
+    }
+
+    /**
      * Restocks the cafe's inventory.
      * @param nCoffeeOunces The amount of coffee to add.
      * @param nSugarPackets The number of sugar packets to add.
@@ -54,17 +86,41 @@ public class Cafe extends Building implements CafeRequirements{
         this.nCups += nCups;
         System.out.println("Restocked inventory: " + nCoffeeOunces + " coffee ounces, " + nSugarPackets + " sugar packets, " + nCreams + " creams, " + nCups + " cups.");
     }
+
+    /**
+     * Overrides the showOptions method (deleted goUp/goDown/goToFloor, added Cafe specific options).
+     */
+    @Override
+    public void showOptions() {
+        System.out.println("Available options at " + this.name + ":\n + enter() \n + exit()");
+        System.out.println(" + sellCoffee(size, nSugarPackets, nCreams)");
+        System.out.println(" + sellCoffee()");
+        System.out.println(" + restock(nCoffeeOunces, nSugarPackets, nCreams, nCups)");
+    }
+
     /**
      * Main method to test the Cafe class.
      * @param args Command-line arguments.
      */
     public static void main(String[] args) {
-        // Create a new Cafe
-        Cafe campusCafe = new Cafe("Campus Cafe", "100 Elm St", 1);
-
-        // Sell some coffee
+        System.out.println("------------------------------------");
+        System.out.println("Test of Building constructor/methods");
+        System.out.println("------------------------------------");
+        Cafe campusCafe = new Cafe("Campus Cafe", "100 Elm St");
+        System.out.println(campusCafe);
+        campusCafe.showOptions();
         campusCafe.sellCoffee(12, 2, 3);
         campusCafe.sellCoffee(100, 50, 30); // This should trigger a restock
-        campusCafe.sellCoffee(12, 2, 3);
+        campusCafe.sellCoffee();
+
+        System.out.println("-----------------------------------");
+        System.out.println("Demonstrating enter/exit/navigation");
+        System.out.println("-----------------------------------");
+        campusCafe.enter();
+        // campusCafe.goUp(); This should throw an exception since the cafe has only one floor
+        // campusCafe.goDown(); This should throw an exception since the cafe has only one floor
+        // campusCafe.goToFloor(2); This should throw an exception since the cafe has only one floor
+        campusCafe.exit();
     }
 }
+
