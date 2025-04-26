@@ -25,9 +25,21 @@ public class Library extends Building implements LibraryRequirements{
         System.out.println("You have built a library: 📖");
     }
 
-    /* Overloaded constructor (defaults to no elevator) */
-    public Library(String name, String address, int nFloors) {
-        this(name, address, nFloors, false);
+    /* Default constructor */
+    public Library() {
+        this("<Name Unknown>", "<Address Unknown>", 3, true);
+      }
+  
+    /* Overloaded constructor with name and address */
+    public Library(String name, String address) {
+        this(name, address, 3, true); 
+        this.name = name;
+        this.address = address;
+    }
+  
+    /* Overloaded constructor with nFloors and hasElevator */
+    public Library(int nFloor, boolean hasElevator) {
+        this("<Name Unknown", "<Address Unknown>", nFloor, hasElevator);
     }
 
     /**
@@ -60,14 +72,16 @@ public class Library extends Building implements LibraryRequirements{
         this.collection.put(title, true);
         System.out.println(title + " has been added to the library.");
         } else {
-        System.out.println(title + " is already in the library.");
+        throw new RuntimeException(title + " is already in the library.");
         }
     }
 
     /* Overloaded addTitle method (adds multiple titles at once) */
     public void addTitle(String[] titles) {
         for (String title : titles) {
-          this.addTitle(title);
+            if (!this.collection.containsKey(title)) {
+                this.addTitle(title);
+            }
         }
     }
 
@@ -82,17 +96,18 @@ public class Library extends Building implements LibraryRequirements{
         System.out.println(title + " has been removed from the library.");
         return title;
         } else {
-        System.out.println(title + " is not in the library.");
-        return null;
+        throw new RuntimeException(title + " is not in the library.");
         }
     }
 
     /* Overloaded removeTitle method (removes multiple titles at once) */
     public void removeTitle(String[] titles) {
         for (String title : titles) {
-          this.removeTitle(title);
+            if (this.collection.containsKey(title)) {
+                this.removeTitle(title);
+            }
         }
-      }
+    }
 
     /**
      * Checks out a book if it is available in the library.
@@ -104,10 +119,10 @@ public class Library extends Building implements LibraryRequirements{
                 this.collection.replace(title, false);
                 System.out.println(title + " is checked out.");
             } else {
-                throw new IllegalStateException(title + " is already checked out.");
+                throw new RuntimeException(title + " is already checked out.");
             }
         } else {
-            throw new IllegalArgumentException(title + " is not in the library collection.");
+            throw new RuntimeException(title + " is not in the library collection.");
         }
     }
 
@@ -121,7 +136,7 @@ public class Library extends Building implements LibraryRequirements{
             this.collection.replace(title, true);
             System.out.println(title + " has been returned to the library.");
         } else {
-            System.out.println(title + " was unable to be returned.");
+            throw new RuntimeException(title + " was unable to be returned.");
         }
     }
     
@@ -186,14 +201,13 @@ public class Library extends Building implements LibraryRequirements{
 
         // Add books to the library
         neilsonLibrary.addTitle("The Old Man and the Sea by Ernest Hemingway");
-        String[] newBooks = {"Animal Farm by George Orwell", "The Design of Everyday Things by Don Norman"};
-        neilsonLibrary.addTitle(newBooks);
+        String[] books = {"Animal Farm by George Orwell", "The Design of Everyday Things by Don Norman"};
+        neilsonLibrary.addTitle(books);
         neilsonLibrary.printCollection();
 
-        // Remove a book
+        // Remove books from the libiray
         neilsonLibrary.removeTitle("The Old Man and the Sea by Ernest Hemingway");
-        String[] removeBooks = {"Animal Farm by George Orwell", "The Design of Everyday Things by Don Norman"};
-        neilsonLibrary.removeTitle(removeBooks);
+        neilsonLibrary.removeTitle(books);
         neilsonLibrary.printCollection();
 
     }
