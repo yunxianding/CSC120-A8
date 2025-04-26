@@ -31,20 +31,27 @@ public class Cafe extends Building implements CafeRequirements {
         this(name, address, 1); // Default to 1 floor
     }
 
-
+    /** Overrides goUp method because cafe doesn't support goUp */
     @Override
     public void goUp() {
         throw new UnsupportedOperationException("Cafes only have one floor. You cannot go up.");
+
     }
 
+    /** Overrides goDown method because cafe doesn't support goDown  */
     @Override
     public void goDown() {
         throw new UnsupportedOperationException("Cafes only have one floor. You cannot go down.");
     }
 
+    /** Overrides goToFloor method so that the cutomer cannot go to another floor */
     @Override
     public void goToFloor(int floorNum) {
-        throw new UnsupportedOperationException("Cafes only have one floor. You cannot go to another floor.");
+        if (floorNum != 1) {
+            throw new UnsupportedOperationException("Cafes only have one floor. You cannot go to another floor.");
+        } else {
+            System.out.println("You are already on the ground floor of the cafe!");
+        }
     }
 
     /**
@@ -79,12 +86,19 @@ public class Cafe extends Building implements CafeRequirements {
      * @param nCreams The number of cream splashes to add.
      * @param nCups The number of cups to add.
      */
-    private void restock(int nCoffeeOunces, int nSugarPackets, int nCreams, int nCups) {
+    public void restock(int nCoffeeOunces, int nSugarPackets, int nCreams, int nCups) {
         this.nCoffeeOunces += nCoffeeOunces;
         this.nSugarPackets += nSugarPackets;
         this.nCreams += nCreams;
         this.nCups += nCups;
         System.out.println("Restocked inventory: " + nCoffeeOunces + " coffee ounces, " + nSugarPackets + " sugar packets, " + nCreams + " creams, " + nCups + " cups.");
+    }
+
+    /**
+     * Overloaded restock method for default restock.
+     */
+    public void restock() {
+        restock(50, 50, 50, 50);
     }
 
     /**
@@ -112,14 +126,15 @@ public class Cafe extends Building implements CafeRequirements {
         campusCafe.sellCoffee(12, 2, 3);
         campusCafe.sellCoffee(100, 50, 30); // This should trigger a restock
         campusCafe.sellCoffee();
+        campusCafe.restock();
 
         System.out.println("-----------------------------------");
         System.out.println("Demonstrating enter/exit/navigation");
         System.out.println("-----------------------------------");
         campusCafe.enter();
-        // campusCafe.goUp(); This should throw an exception since the cafe has only one floor
-        // campusCafe.goDown(); This should throw an exception since the cafe has only one floor
-        // campusCafe.goToFloor(2); This should throw an exception since the cafe has only one floor
+        // campusCafe.goUp(); // This should throw an exception since the cafe has only one floor
+        // campusCafe.goDown(); // This should throw an exception since the cafe has only one floor
+        // campusCafe.goToFloor(2); // This should throw an exception since the cafe has only one floor
         campusCafe.exit();
     }
 }
