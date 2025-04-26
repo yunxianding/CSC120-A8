@@ -43,23 +43,26 @@ public class CampusMap {
     public static void main(String[] args) {
         CampusMap myMap = new CampusMap();
 
-        // Adding various buildings to the map
+        // Adding academic buildings to the map
         myMap.addBuilding(new Building("Ford Hall", "100 Green Street Northampton, MA 01063", 4));
         myMap.addBuilding(new Building("Bass Hall", "4 Tyler Court Northampton, MA 01063", 4));
-        House lawrenceHouse = new House("Lawrence House", "99 Green Street Northampton, MA 01063", 4, false);
-        myMap.addBuilding(lawrenceHouse);
-        myMap.addBuilding(new House("Tyler House", "123 Green Street Northampton, MA 01063", 4, true));
-        myMap.addBuilding(new House("Morris House", "101 Green Street Northampton, MA 01063", 4, false));
-        Library neilsonLibrary = new Library("Neilson Library", "7 Neilson Drive Northampton, MA 01063", 4, true);
-        myMap.addBuilding(neilsonLibrary);
-        myMap.addBuilding(new Library("Hillyer Art Library", "20 Elm Street Northampton, MA 01063", 2, false));
-        myMap.addBuilding(new Library("Josten Library", "122 Green Street Northampton, MA 01063", 2, true));
-        Cafe campusCafe = new Cafe("Campus Cafe", "100 Elm St");
-        myMap.addBuilding(campusCafe);
-        myMap.addBuilding(new Cafe("Campus Center Cafe", "10 Elm Street Northampton, MA 01063"));
         myMap.addBuilding(new Building("Seelye Hall", "2 Seelye Drive Northampton, MA 01063", 3));
         myMap.addBuilding(new Building("McConnell Hall", "15 Green Street Northampton, MA 01063", 4));
 
+        // Adding houses
+        myMap.addBuilding(new House("Lawrence House", "99 Green Street Northampton, MA 01063", 4, false, false));
+        myMap.addBuilding(new House("Tyler House", "123 Green Street Northampton, MA 01063", 4, true, false));
+        myMap.addBuilding(new House("Cutter House", "79 Elm Street Northampton, MA 01063", 3, true, true));
+
+        // Adding libraries
+        myMap.addBuilding(new Library("Neilson Library", "7 Neilson Drive Northampton, MA 01063", 4, true));
+        myMap.addBuilding(new Library("Hillyer Art Library", "20 Elm Street Northampton, MA 01063", 2, false));
+        myMap.addBuilding(new Library("Josten Library", "122 Green Street Northampton, MA 01063", 2, true));
+        
+        // Adding cafes
+        myMap.addBuilding(new Cafe("Campus Cafe", "100 Elm St"));
+        myMap.addBuilding(new Cafe("Campus Center Cafe", "10 Elm Street Northampton, MA 01063"));
+        
         // Display the campus map
         System.out.println(myMap);
         
@@ -68,21 +71,30 @@ public class CampusMap {
         System.out.println("-----------------------------------");
 
         // Demonstrating overloaded methods for House
-        System.out.println("House Overloaded Methods:");
-        lawrenceHouse.moveIn("Yunxian"); // Overloaded moveIn with a name
-        lawrenceHouse.moveOut("Yunxian"); // Overloaded moveOut with a name
+        System.out.println("\nHouse Overloaded Methods:");
+        ArrayList<Student> students = new ArrayList<Student>();
+        Student A = new Student("A", "123", 2028);
+        Student B = new Student("B", "456", 2028);
+        Student C = new Student("C", "789", 2028);
+        students.add(A);
+        students.add(B);
+        students.add(C);
+        House lawrence = new House("Lawrence House", "99 Green St", 4, false, false);
+        lawrence.moveIn(students);
+        lawrence.moveOut(students);
 
         // Demonstrating overloaded methods for Library
         System.out.println("\nLibrary Overloaded Methods:");
+        Library neilsonLibrary = new Library("Neilson Library", "7 Neilson Drive", 4, true);
         String[] books = {"The Old Man and the Sea", "Animal Farm", "The Design of Everyday Things"};
-        neilsonLibrary.addTitle(books); // Add multiple titles
-        neilsonLibrary.printCollection();
-        neilsonLibrary.removeTitle(books); // Remove multiple titles
-        neilsonLibrary.printCollection();
+        neilsonLibrary.addTitle(books);
+        neilsonLibrary.removeTitle(books); 
 
         // Demonstrating overloaded methods for Cafe
         System.out.println("\nCafe Overloaded Methods:");
-        campusCafe.sellCoffee(); // Default coffee order
+        Cafe campusCafe = new Cafe("Campus Cafe", "100 Elm St");
+        campusCafe.sellCoffee(); 
+        campusCafe.restock();
 
     }
 }
