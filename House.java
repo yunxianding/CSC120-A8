@@ -30,9 +30,14 @@ public class House extends Building implements HouseRequirements {
         System.out.println("You have built a house: 🏠");
     }
 
-    /* Overloaded constructor (without elevator information, defaults to no elevator) */
-    public House(String name, String address, int nFloors, boolean hasDiningRoom) {
-        this(name, address, nFloors, hasDiningRoom, false);
+    /* Default constructor (with no dining hall and no elevator) */
+    public House() {
+        this("<Name Unknown>", "<Address Unknown>", 1, false, false);
+    }
+
+    /* Overloaded constructor with nFloor, hasElevator, and hasDiningRoom only */
+    public House(int nFloors, boolean hasDiningRoom, boolean hasElevator) {
+        this("<Name Unknown>", "Address Unknown", nFloors, hasDiningRoom, hasElevator);
     }
 
     /**
@@ -41,6 +46,14 @@ public class House extends Building implements HouseRequirements {
      */
     public boolean hasDiningRoom() {
         return this.hasDiningRoom;
+    }
+
+    /**
+     * Checks if the house has an elevator.
+     * @return true if the house has an elevator, false otherwise.
+     */
+    public boolean hasElevator() {
+        return this.hasElevator;
     }
 
     /**
@@ -58,45 +71,49 @@ public class House extends Building implements HouseRequirements {
     public void moveIn(Student s) {
         if (!this.residents.contains(s)) {
             this.residents.add(s);
-            System.out.println(s.getName() + " has moved into " + this.getName() + "House.");
+            System.out.println(s.getName() + " has moved into " + this.getName() + "House successfully.");
         } else {
-            System.out.println(s.getName() + " is already a resident of " + this.getName() + "House.");
+            throw new RuntimeException(s.getName() + " is already a resident of " + this.getName() + "House.");
         }
     }
 
-    /* Overloaded moveIn method (accepts a student's name instead of a Student object) */
-    public void moveIn(String studentName) {
-        Student s = new Student(studentName); 
-        this.moveIn(s);
+    /* Overloaded moveIn method (move in multiple students) */
+    public void moveIn(ArrayList<Student> students) {
+        for(int i = 0; i <= (students.size() - 1 ); i++) { 
+            if(this.residents.contains(students.get(i))) { 
+                throw new RuntimeException(students.get(i).getName() + "already lives here.");
+            } else {
+            this.residents.add(students.get(i));
+            System.out.println(students.get(i).getName() + " has moved in successfully.");
+          }
+        }
     }
 
     /**
     * Moves a student out of the house if they are a resident.
     * @param s The student to move out of the house.
-    * @return The student who moved out.
-    * @throws IllegalArgumentException if the student is not a resident.
     */
     public Student moveOut(Student s) {
         if (this.residents.contains(s)) {
             this.residents.remove(s);
-            System.out.println(s.getName() + " has moved out of " + this.getName() + "House.");
+            System.out.println(s.getName() + " has moved out of " + this.getName() + "House successfully.");
             return s;
         } else {
-            throw new IllegalArgumentException(s.getName() + " is not a resident of " + this.getName() + "House.");
+            throw new RuntimeException(s.getName() + " is not a resident of " + this.getName() + "House.");
         }
-      }
+    }
 
-    /* Overloaded moveOut method (removes a student by name) */
-    public Student moveOut(String studentName) {
-        for (Student s : this.residents) {
-            if (s.getName().equals(studentName)) {
-                return this.moveOut(s);
-            }
-        } 
-        throw new IllegalArgumentException(studentName + " is not a resident of " + this.getName() + "House.");
+    /* Overloaded moveOut method (move out multiple students) */
+    public void moveOut(ArrayList<Student> students) {
+        for(int i = 0; i <= (students.size() - 1); i++) {
+            if(this.residents.contains(students.get(i))) {
+                System.out.println(students.get(i).getName() + " has moved out successfully.");
+            } else {
+            throw new RuntimeException(students.get(i).getName() + "does not live here.");
+            }    
+        }
     }
     
-
     /**
      * Checks if a student is a resident of the house.
      * @param s The student to check.
@@ -107,12 +124,15 @@ public class House extends Building implements HouseRequirements {
     }
 
     /**
-     * Overrides the showOptions method to include House-specific options.
-     */
-    @Override
+    * Overrides the showOptions method to show available options in a house.
+    */
     public void showOptions() {
-        super.showOptions();
-        System.out.println(" + moveIn(Student s) \n + moveOut(Student s) \n + hasDiningRoom() \n + nResidents()");
+        if (hasElevator) {
+            super.showOptions(); 
+            System.out.println(" + moveIn(Student s) \n + moveOut(Student s) \n");
+        } else {
+        System.out.println("Available options at " + this.name + ":\n + enter() \n + exit() \n + goUp() \n + goDown() \n + moveIn(Student s) \n + moveOut(Student s) \n");
+        }
     }
 
     /**
@@ -132,9 +152,16 @@ public class House extends Building implements HouseRequirements {
      * @param args
      */
     public static void main(String[] args) {
-        House lawrence = new House("Lawrence House", "99 Green St", 4, false);
+        House lawrence = new House("Lawrence House", "99 Green St", 4, false, false);
         System.out.println(lawrence);
         lawrence.showOptions();
+        ArrayList<Student> students = new ArrayList<Student>();
+        Student A = new Student("A", "123", 2028);
+        Student B = new Student("B", "456", 2028);
+        Student C = new Student("C", "789", 2028);
+        students.add(A);
+        students.add(B);
+        students.add(C);
 
         System.out.println("-----------------------------------");
         System.out.println("Demonstrating enter/exit/navigation");
@@ -142,18 +169,16 @@ public class House extends Building implements HouseRequirements {
         lawrence.enter();
         lawrence.goUp();
         lawrence.goDown();
-        // lawrence.goToFloor(4); This should throw an exception since the house has no elevator
-        // lawrence.goToFloor(2);
-        // lawrence.exit(); // This should throw an exception because we can't exit from the 4th floor
+        //lawrence.goToFloor(4); // This should throw an exception since the house has no elevator
+        //lawrence.goToFloor(2);
+        //lawrence.exit(); // This should throw an exception because we can't exit from the 4th floor
         lawrence.goToFloor(1);
         lawrence.exit(); // This should work now
 
         System.out.println("-----------------------------------");
         System.out.println("Demonstrating moveIn/moveOut");
         System.out.println("-----------------------------------");
-        Student yunxian = new Student("Yunxian");
-        lawrence.moveIn(yunxian);
-        lawrence.moveOut(yunxian);
-        lawrence.moveOut("ding"); // This should fail since "ding" is not a resident
+        lawrence.moveIn(students);
+        lawrence.moveOut(students);
     }
 }
